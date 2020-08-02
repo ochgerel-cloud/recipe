@@ -17,7 +17,7 @@ export default class Search {
 
 
         } catch (error) {
-            alert("Асуудал гарлаа: " + error);
+            console.log("Асуудал гарлаа: " + error);
         }
 
 
