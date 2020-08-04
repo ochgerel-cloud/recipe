@@ -2,7 +2,7 @@ require('@babel/polyfill');
 import Search from './model/search';
 import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
-// import sda from './view/sda';
+import Recipe from './model/recipe';
 
 /**
  * Web app төлөв
@@ -60,3 +60,6 @@ elements.pageButtons.addEventListener('click', e => {
     }
 
 });
+
+const r = new Recipe(47746);
+r.getRecipe();
