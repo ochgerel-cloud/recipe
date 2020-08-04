@@ -21,7 +21,7 @@ const controlSearch = async () => {
     const query = searchView.getInput();
 
 
-    if (query) {
+    if (query) { //Хэрвээ query хувьсагч нь хоосон биш юмтай байх юм бол энэ блок ажиллана.
 
         // 2.Шинээр хайлтын объектийг үүсгэж өгнө.
         state.search = new Search(query);
@@ -46,4 +46,17 @@ const controlSearch = async () => {
 elements.searchForm.addEventListener('submit', e => {
     e.preventDefault(); //Хайх товчлуур дээр дарахад submit хийдэг default үйлдлийг зогсоож байна.
     controlSearch();
+});
+
+elements.pageButtons.addEventListener('click', e => {
+    const btn = e.target.closest(".btn-inline"); // closest функц нь pageButtons буюу results__pages div дотор байгаа .btn-inline classtai аль нэг курсортой ойр дарагдсан div tag-ийг сонгоно.
+
+    // console.log(btn);
+
+    if (btn) {
+        const gotoPageNumber = parseInt(btn.dataset.goto);
+        searchView.clearSearchResult();
+        searchView.renderRecipes(state.search.result, gotoPageNumber);
+    }
+
 });

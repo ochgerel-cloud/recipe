@@ -4,6 +4,7 @@ export const elements = {
     searchResultDiv: document.querySelector('.results'),
     searchResultList: document.querySelector('.results__list'),
     searchLoader: document.querySelector('.loader'),
+    pageButtons: document.querySelector('.results__pages'),
 
 };
 

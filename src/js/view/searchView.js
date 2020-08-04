@@ -13,8 +13,8 @@ const renderRecipe = recipe => {
             <p class="results__author">${recipe.publisher}</p>
         </div>
     </a>
-</li>
-`;
+</li>`;
+
     // ul рүүгээ нэмнэ
     elements.searchResultList.insertAdjacentHTML('beforeend', markup);
 
@@ -24,9 +24,64 @@ export const clearSearchQuery = () => {
 };
 export const clearSearchResult = () => {
     elements.searchResultList.innerHTML = ' ';
+    elements.pageButtons.innerHTML = '';
 };
 export const getInput = () => elements.searchInput.value;
-export const renderRecipes = recipes => {
+export const renderRecipes = (recipes, currentPage = 1, resPerPage = 10) => {
 
-    recipes.forEach(renderRecipe);// recipes.forEach(element => renderRecipe(element));
+    // хайлтын үр дүнг хуудаслаж үзүүлэх
+    // if page = 2, start = 10, end = 20
+    const start = (currentPage - 1) * resPerPage;
+    const end = currentPage * resPerPage;
+
+    // console.log("end: " + end);
+
+    recipes.slice(start, end).forEach(renderRecipe);// recipes.forEach(element => renderRecipe(element));
+
+    // Хуудаслалтын товчуудыг гаргаж ирэх
+    const totalPages = Math.ceil(recipes.length / resPerPage);
+    renderButtons(currentPage, totalPages);
 }
+
+// type ===> 'prev', 'next'
+const createButton = (page, type) => {
+    let direction;
+
+    if (type === 'next') { direction = 'right' }
+    else { direction = 'left' }
+
+
+
+    return `<button class="btn-inline results__btn--${type}" data-goto=${page}>
+    <svg class="search__icon">
+        <use href="img/icons.svg#icon-triangle-${direction}"></use>
+    </svg>
+    <span>Хуудас ${page}</span>
+</button>`;
+
+}
+
+const renderButtons = (currentPage, totalPages) => {
+    let buttonHTML;
+
+    if (currentPage === 1 && totalPages > 1) {
+        // 1-р хуудсан дээрб айна, 2-р хуудас гэдэг товчийг гарга
+        buttonHTML = createButton(2, 'next');
+
+    } else if (currentPage < totalPages) {
+
+        // Өмнөх болон дараачийн хуудас руу шилжих товчуудыг үзүүл
+        buttonHTML = createButton(currentPage - 1, 'prev');
+        buttonHTML += createButton(currentPage + 1, 'next');
+    }
+    else if (currentPage === totalPages) {
+
+        // Хамгийн сүүлийн хуудас дээр байна. Өмнөх рүү шилжүүлэх товчийг л үзүүлнэ
+        buttonHTML = createButton(currentPage - 1, 'prev');
+    }
+
+    elements.pageButtons.insertAdjacentHTML('afterbegin', buttonHTML);
+
+
+}
+
